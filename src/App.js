@@ -11,27 +11,7 @@ function App() {
   const [bot,setBot]=useState([])
 
 
-  useEffect(()=>{
 
-    const options = {
-      method: 'DELETE',
-      url: 'https://waifu.p.rapidapi.com/v1/user/id/sample_user_id',
-      headers: {
-        'content-type': 'application/json',
-        'X-RapidAPI-Key': '4e3d8fc05bmshb10ff6efee446c9p1280c1jsnf55678c818b3',
-        'X-RapidAPI-Host': 'waifu.p.rapidapi.com'
-      },
-      data: '{"key1":"value","key2":"value"}'
-    };
-    
-    axios.request(options).then(function (response) {
-      console.log(response.data);
-    }).catch(function (error) {
-      console.error(error);
-    });
-
-  })
- 
   
   const handelSubmit =(event)=>{
     event.preventDefault();
