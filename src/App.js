@@ -58,7 +58,25 @@ function App() {
       data: '{}'
     };
     axios.request(options).then(function (response) {
-          setBot(pr=>[ {msg:response.data,from:"bot"},...pr]);
+                const encodedParams = new URLSearchParams();
+                encodedParams.append("content",response.data);
+                encodedParams.append("censor-character", "*");
+
+                const options = {
+                  method: 'POST',
+                  headers: {
+                    'content-type': 'application/x-www-form-urlencoded',
+                    'X-RapidAPI-Key': '4e3d8fc05bmshb10ff6efee446c9p1280c1jsnf55678c818b3',
+                    'X-RapidAPI-Host': 'neutrinoapi-bad-word-filter.p.rapidapi.com'
+                  },
+                  body: encodedParams
+                };
+
+                fetch('https://neutrinoapi-bad-word-filter.p.rapidapi.com/bad-word-filter', options)
+                  .then(response => response.json())
+                  .then(response => setBot(pr=>[ {msg:response["censored-content"],from:"bot"},...pr]))
+                  .catch(err => console.error(err));
+          
     }).catch(function (error) {
       console.error(error);
     });
