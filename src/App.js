@@ -1,24 +1,87 @@
-import logo from './logo.svg';
-import './App.css';
+import {useEffect, useState} from "react"
+import "./index.css"
+import axios from "axios";
+// import { IconNameHiVolumeUp } from "../node_modules/react-icons/hi";
+// import { HiTranslate} from "../node_modules/react-icons/hi";
+// import { HiDuplicate } from "../node_modules/react-icons/hi";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+  const [msg,setMsg]=useState("")
+  const [bot,setBot]=useState([])
+
+
+  useEffect(()=>{
+
+    const options = {
+      method: 'DELETE',
+      url: 'https://waifu.p.rapidapi.com/v1/user/id/sample_user_id',
+      headers: {
+        'content-type': 'application/json',
+        'X-RapidAPI-Key': '4e3d8fc05bmshb10ff6efee446c9p1280c1jsnf55678c818b3',
+        'X-RapidAPI-Host': 'waifu.p.rapidapi.com'
+      },
+      data: '{"key1":"value","key2":"value"}'
+    };
+    
+    axios.request(options).then(function (response) {
+      console.log(response.data);
+    }).catch(function (error) {
+      console.error(error);
+    });
+
+  })
+ 
+  
+  const handelSubmit =(event)=>{
+    event.preventDefault();
+    console.log('hello world')
+    setMsg('') 
+    setBot([{msg:msg,from:"user"},...bot]);
+    const options = {
+      method: 'POST',
+      url: 'https://waifu.p.rapidapi.com/path',
+      params: {
+        user_id: 'sample_user_id',
+        message: msg ,
+        from_name: 'Boy',
+        to_name: 'Girl',
+        situation: 'Boy loves Girl.',
+        translate_from: 'auto',
+        translate_to: 'auto'
+      },
+      headers: {
+        'content-type': 'application/json',
+        'X-RapidAPI-Key': '4e3d8fc05bmshb10ff6efee446c9p1280c1jsnf55678c818b3',
+        'X-RapidAPI-Host': 'waifu.p.rapidapi.com'
+      },
+      data: '{}'
+    };
+    axios.request(options).then(function (response) {
+          setBot(pr=>[ {msg:response.data,from:"bot"},...pr]);
+    }).catch(function (error) {
+      console.error(error);
+    });
+  }
+return (
+  <section>
+    <div className="msgs">
+      {
+        bot.map((msg,key)=>{
+          return(
+            <p className={msg.from} key={key}><>{msg.msg} </></p>
+            )
+          
+
+        })
+      }
     </div>
+    <form onSubmit={handelSubmit}>
+      <input placeholder="type your message" autoFocus value={msg} onChange={(e)=>setMsg(e.target.value)}></input>
+      <button type="subimt">submit</button>
+    </form>
+  </section>
+
   );
 }
 
